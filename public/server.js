@@ -26,6 +26,7 @@ app.options('/create-transaction', cors());
 
 // Endpoint create-transaction
 app.post('/create-transaction', (req, res) => {
+    console.log('Received request data:', req.body);  // Log the incoming request data
     const orderId = `order-${new Date().getTime()}`;
     const grossAmount = req.body.grossAmount;
 
@@ -38,12 +39,13 @@ app.post('/create-transaction', (req, res) => {
 
     snap.createTransaction(parameter)
         .then((transaction) => {
+            console.log('Transaction created successfully:', transaction);  // Log the transaction object
             res.json({
                 token: transaction.token,
             });
         })
         .catch((err) => {
-            console.error(err);
+            console.error('Error creating transaction:', err);  // Log errors
             res.status(500).json({ error: err.message });
         });
 });
@@ -93,5 +95,5 @@ app.post('/webhook-notification', (req, res) => {
 
 // Start server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running`);
 });

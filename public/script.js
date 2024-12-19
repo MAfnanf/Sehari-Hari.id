@@ -1,7 +1,7 @@
 const products = [
-    { id: 1, name: "Product 1", price: 50000 },
-    { id: 2, name: "Product 2", price: 30000 },
-    { id: 3, name: "Product 3", price: 5000 },
+    { id: 1, name: "Kaos Putih", price: 50000 },
+    { id: 2, name: "Dus Minum Aqua", price: 30000 },
+    { id: 3, name: "Sabun Lifeboy", price: 5000 },
 ];
 
 const cart = [];
@@ -10,6 +10,7 @@ const cartTotal = document.getElementById("cart-total");
 
 document.querySelectorAll(".add-to-cart").forEach((button, index) => {
     button.addEventListener("click", () => {
+        console.log(products[index])
         const product = products[index];
         cart.push(product);
         updateCart();
@@ -42,13 +43,14 @@ function updateCart() {
 document.getElementById("checkout").addEventListener("click", () => {
     const grossAmount = cart.reduce((sum, item) => sum + item.price, 0);
 
-    fetch('http://localhost:3000/create-transaction', {
+    fetch('http://localhost:3000/create-transaction', {  // Change this URL to local server
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ grossAmount: grossAmount }),
     })
         .then((response) => response.json())
         .then((data) => {
+            console.log("Received data from backend:", data); // Log the data from the backend
             if (data.token) {
                 snap.pay(data.token, {
                     onSuccess: function(result) {
